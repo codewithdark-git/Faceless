@@ -34,7 +34,7 @@ def generate_script(topic):
     client = Client()
     response = client.chat.completions.create(
         model='gpt-4o',
-        message=[{'role': 'user', 'content': prompt + "\n\n" + topic}]
+        messages=[{'role': 'user', 'content': prompt + "\n\n" + topic}]
         
     )
     
