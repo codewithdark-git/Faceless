@@ -1,4 +1,5 @@
-from transformers import pipeline
+import g4f
+from g4f.client import Client
 import json
 
 def generate_script(topic):
@@ -30,10 +31,14 @@ def generate_script(topic):
         """
     )
 
-    generator = pipeline('text-generation', model='mistralai/Mistral-Nemo-Instruct-2407')
-    response = generator(prompt + "\n\n" + topic, max_length=200, num_return_sequences=1)
+    client = Client()
+    response = client.chat.completions.create(
+        model='gpt-4o',
+        message=[{'role': 'user', 'content': prompt + "\n\n" + topic}]
+        
+    )
     
-    content = response[0]['generated_text']
+    content = response.choice[0].message.content
     try:
         script = json.loads(content)["script"]
     except json.JSONDecodeError:
