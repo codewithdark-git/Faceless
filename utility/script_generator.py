@@ -38,7 +38,7 @@ def generate_script(topic):
         
     )
     
-    content = response.choice[0].message.content
+    content = response.choices[0].message.content
     try:
         script = json.loads(content)["script"]
     except json.JSONDecodeError:
