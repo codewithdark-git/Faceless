@@ -26,6 +26,7 @@ MarkupSafe==2.1.5
 more-itertools==10.2.0
 moviepy==1.0.3
 mpmath==1.3.0
+g4f
 multidict==6.0.5
 networkx==3.3
 numba==0.59.1
