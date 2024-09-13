@@ -45,8 +45,8 @@ tiktoken==0.7.0
 torch==2.4.1
 tqdm==4.66.4
 transformers==4.44.2
-diffusers
-dotenv
+diffusers==0.20.1
+dotenv==0.0.5
 typing_extensions==4.12.1
 urllib3==2.2.1
 whisper_timestamped==1.15.4
