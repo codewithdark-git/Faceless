@@ -3,8 +3,16 @@ import torch
 import re
 from PIL import Image
 import io
+from dotenv import load_dotenv
+import os
 
-pipe = DiffusionPipeline.from_pretrained("black-forest-labs/FLUX.1-dev")
+load_dotenv()
+
+# Ensure GPU is used if available
+device = "cuda" if torch.cuda.is_available() else "cpu"
+from diffusers import DiffusionPipeline
+
+pipeline = DiffusionPipeline.from_pretrained("Shakker-Labs/AWPortrait-FL")
 
 def generate_image_prompts(script):
     # Split the script into sentences
@@ -19,12 +27,11 @@ def generate_image_prompts(script):
     return prompts
 
 def generate_images(prompts):
-
-    
     image_files = []
     for idx, prompt in enumerate(prompts):
         print(f"Generating image for prompt: {prompt}")
-        image = pipe(prompt).images[0]
+        # Ensure the prompt is processed on the correct device
+        image = pipeline(prompt).images[0]
         filename = f"generated_image_{idx}.png"
         image.save(filename)
         image_files.append(filename)
