@@ -4,6 +4,8 @@ import re
 from PIL import Image
 import io
 
+pipe = DiffusionPipeline.from_pretrained("black-forest-labs/FLUX.1-dev")
+
 def generate_image_prompts(script):
     # Split the script into sentences
     sentences = re.split(r'(?<=[.!?]) +', script)
@@ -18,9 +20,7 @@ def generate_image_prompts(script):
 
 def generate_images(prompts):
 
-    pipe = DiffusionPipeline.from_pretrained("black-forest-labs/FLUX.1-dev")
-    pipe = pipe.to(device)
-
+    
     image_files = []
     for idx, prompt in enumerate(prompts):
         print(f"Generating image for prompt: {prompt}")
