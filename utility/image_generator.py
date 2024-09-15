@@ -1,4 +1,4 @@
-from diffusers import DiffusionPipeline
+from diffusers import StableDiffusionPipeline
 import torch
 import re
 from PIL import Image
@@ -8,11 +8,9 @@ import os
 
 load_dotenv()
 
-# Ensure GPU is used if available
-device = "cuda" if torch.cuda.is_available() else "cpu"
-from diffusers import DiffusionPipeline
 
-pipeline = DiffusionPipeline.from_pretrained("Shakker-Labs/AWPortrait-FL")
+pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4", revision="fp16", torch_dtype=torch.float16)
+pipe.to("cpu")
 
 def generate_image_prompts(script):
     # Split the script into sentences
@@ -31,7 +29,7 @@ def generate_images(prompts):
     for idx, prompt in enumerate(prompts):
         print(f"Generating image for prompt: {prompt}")
         # Ensure the prompt is processed on the correct device
-        image = pipeline(prompt).images[0]
+        image = pipe(prompt).images[0]
         filename = f"generated_image_{idx}.png"
         image.save(filename)
         image_files.append(filename)
