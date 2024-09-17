@@ -15,7 +15,7 @@ def get_output_media(audio_file_path, timed_captions, image_files):
         # Create an ImageClip for each generated image
         image_filename = image_files[idx] if idx < len(image_files) else image_files[-1]
         image_clip = ImageClip(image_filename).set_duration(t2 - t1).set_start(t1)
-        image_clip = image_clip.resize(height=720)  # Resize if necessary
+        image_clip = image_clip.resize(height=720)  # Resize to height 720 without method argument
         visual_clips.append(image_clip)
         
         # Add text overlay
