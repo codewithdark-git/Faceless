@@ -7,16 +7,19 @@ from utility.audio_generator import generate_audio
 from utility.timed_captions_generator import generate_timed_captions
 from utility.image_generator import generate_image_prompts, generate_images
 from utility.render_engine import get_output_media
+import asyncio  # Add this import
+
 
 # Load environment variables
 load_dotenv()
 
 # Function to generate content
-def generate_content(topic):
+async def generate_content(topic):  # Change to async function
     script = generate_script(topic)
+    print("Generating content", script)
     
     audio_file = "output_audio.mp3"
-    generate_audio(script, audio_file)
+    await generate_audio(script, audio_file)  # Await the audio generation
     
     captions_timed = generate_timed_captions(audio_file)
     
@@ -25,13 +28,13 @@ def generate_content(topic):
     
     if not image_files:
         print("No images were generated due to rate limiting or other errors.")
-       
+
     output_file = get_output_media(audio_file, captions_timed, image_files)
 
     return script, audio_file, image_files, output_file
 
 def main(topic):
-    script, audio_file, image_files, output_file = generate_content(topic)
+    script, audio_file, image_files, output_file = asyncio.run(generate_content(topic))  # Run the async function
     print(f"Script: {script}")
     print(f"Audio File: {audio_file}")
     print(f"Image Files: {image_files}")
