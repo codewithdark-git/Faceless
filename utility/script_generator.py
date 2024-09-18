@@ -2,7 +2,18 @@ import g4f
 from g4f.client import Client
 import json
 
-def generate_script(topic):
+def generate_script(prompt):
+    client = Client()
+    response = client.chat.completions.create(
+        model='gpt-4',  # Replace with the correct model identifier
+        messages=[{'role': 'user', 'content': prompt}]
+    )
+    
+    content = response.choices[0].message.content
+    
+    return content
+
+def create_prompt(topic):
     prompt = (
         """You are a seasoned content writer for a YouTube Shorts channel, specializing in facts videos. 
         Your facts shorts are concise, each lasting less than 50 seconds (approximately 140 words). 
@@ -30,21 +41,18 @@ def generate_script(topic):
         {"script": "Here is the script ..."}
         """
     )
+    return prompt + "\n\n" + topic
 
-    client = Client()
-    response = client.chat.completions.create(
-        model='gpt-4o',
-        messages=[{'role': 'user', 'content': prompt + "\n\n" + topic}]
+
+def extract_keywords(prompt):
+    # Construct the API prompt to ask for keywords
+    keyword_prompt = (
+        """You are an expert in text analysis. I need you to extract the most relevant keywords from the following prompt.
         
-    )
-    
-    content = response.choices[0].message.content
-    try:
-        script = json.loads(content)["script"]
-    except json.JSONDecodeError:
-        print("JSONDecodeError. Attempting to extract JSON from the response.")
-        json_start = content.find('{')
-        json_end = content.rfind('}') + 1
-        script = json.loads(content[json_start:json_end])["script"]
-    
-    return script
+        Prompt:
+        {}
+        
+        Please provide a list of keywords separated by commas."""
+    ).format(prompt)
+
+    return keyword_prompt
